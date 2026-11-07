@@ -34,7 +34,7 @@ Python, Flask, Checkov, Groq (gpt-oss-120b), PyYAML.
 
 ## TODO (Niaz)
 - [ ] Confirm "Join hackathon" on safespace-hacks.devpost.com and student status (UniSC MSc) + geographic eligibility.
-- [ ] Create public GitHub repo `misconfig-explained` and push (no keys committed).
+- [x] Public repo: https://github.com/shohrabniaz/misconfig-explained
 - [x] Screenshots (required): done in `screenshots/` (retake if the UI changes).
 - [ ] Accessible demo: hosted URL (e.g. Render/Vercel free) or recorded walkthrough (video optional).
 - [ ] Team/credits section; fill your name.
