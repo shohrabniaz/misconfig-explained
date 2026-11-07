@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>MisconfigExplained</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font-family:system-ui,sans-serif;max-width:960px;margin:2rem auto;padding:0 1rem;line-height:1.5}
+textarea{width:100%;height:220px;font-family:monospace}pre{background:#f4f4f4;padding:1rem;overflow:auto}
+.card{border:1px solid #ccc;border-radius:8px;padding:1rem;margin:.6rem 0}.ok{color:#0a6b2b}.warn{color:#9a5b00}.bad{color:#b00020}
+.note{background:#fff8e1;padding:.6rem;border-radius:6px}</style></head><body>
+<h1>MisconfigExplained</h1>
+<p>Paste a Terraform or Kubernetes file. We scan it with Checkov, explain each finding in plain English, propose a fix, and <strong>re-scan the fix to check it</strong>.</p>
+<p class="note">Prototype. Use synthetic or your own files only; do not paste secrets. A clean re-scan does not prove the fix deploys or keeps behaviour, so review every change.</p>
+<form method="post" enctype="multipart/form-data">
+<label>File name <input name="filename" value="{{filename}}"></label> or upload <input type="file" name="file" accept=".tf,.yaml,.yml"><br>
+<label for="c">File content</label><textarea id="c" name="content">{{content}}</textarea>
+<button type="submit">Explain and fix</button></form>
+{% if error %}<p class="bad" role="alert">Error: {{error}}</p>{% endif %}
+{% if result %}<h2>Results ({{result.kind}})</h2>
+{% if not result.before %}<p class="ok">No Checkov findings.</p>{% else %}
+<p>{{result.before|length}} finding(s) before.</p>
+{% for e in result.explanations %}<div class="card"><strong>{{e.check_id}}</strong>
+<p>{{e.plain_english}}</p><p><em>Risk:</em> {{e.risk}}</p><p><em>Fix:</em> {{e.fix_summary}}</p></div>{% endfor %}
+<h3>Verification</h3>
+<p class="{{'ok' if result.verdict.startswith('verified') else ('warn' if result.verdict.startswith('partial') else 'bad')}}">{{result.verdict}}</p>
+<p>Syntax: {{result.syntax_msg}}. Fixed: {{result.fixed_ids|join(', ') or 'none'}}. New: {{result.new_ids|join(', ') or 'none'}}.</p>
+<h3>Proposed file</h3><pre>{{result.fixed_file}}</pre>{% endif %}{% endif %}
+</body></html>
